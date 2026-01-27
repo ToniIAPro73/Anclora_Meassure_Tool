@@ -1,0 +1,98 @@
+
+import React from 'react';
+import { Unit, RulerConfig } from '../types';
+import { Settings2, RotateCw, Ruler as RulerIcon, Monitor, Maximize2 } from 'lucide-react';
+
+interface SettingsPanelProps {
+  config: RulerConfig;
+  setConfig: React.Dispatch<React.SetStateAction<RulerConfig>>;
+}
+
+export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig }) => {
+  const updateConfig = (updates: Partial<RulerConfig>) => {
+    setConfig(prev => ({ ...prev, ...updates }));
+  };
+
+  const toggleOrientation = () => {
+    updateConfig({ 
+      orientation: config.orientation === 'horizontal' ? 'vertical' : 'horizontal' 
+    });
+  };
+
+  return (
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl p-6 z-50 flex flex-col md:flex-row items-center gap-8 min-w-[300px] md:min-w-0">
+      <div className="flex items-center gap-3">
+        <div className="bg-slate-100 p-2 rounded-xl text-slate-500">
+          <Settings2 size={20} />
+        </div>
+        <div className="h-8 w-[1px] bg-slate-200 hidden md:block" />
+      </div>
+
+      {/* Unit Selection */}
+      <div className="flex flex-col gap-2">
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+          <RulerIcon size={12} /> Unit System
+        </label>
+        <div className="flex bg-slate-100 p-1 rounded-xl">
+          {Object.values(Unit).map(u => (
+            <button
+              key={u}
+              onClick={() => updateConfig({ unit: u })}
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                config.unit === u 
+                  ? 'bg-white text-amber-800 shadow-sm' 
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              {u.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* DPI Calibration */}
+      <div className="flex flex-col gap-2 w-full md:w-48">
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
+          <div className="flex items-center gap-1"><Monitor size={12} /> Calibration (DPI)</div>
+          <span className="text-amber-700">{config.dpi}</span>
+        </label>
+        <input 
+          type="range"
+          min="72"
+          max="200"
+          value={config.dpi}
+          onChange={(e) => updateConfig({ dpi: parseInt(e.target.value) })}
+          className="w-full accent-amber-800 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      {/* Ruler Length */}
+      <div className="flex flex-col gap-2 w-full md:w-48">
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
+          <div className="flex items-center gap-1"><Maximize2 size={12} /> Ruler Length (px)</div>
+          <span className="text-amber-700">{config.length}</span>
+        </label>
+        <input 
+          type="range"
+          min="200"
+          max="2000"
+          step="50"
+          value={config.length}
+          onChange={(e) => updateConfig({ length: parseInt(e.target.value) })}
+          className="w-full accent-amber-800 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      {/* Orientation Toggle */}
+      <button 
+        onClick={toggleOrientation}
+        className="flex flex-col items-center justify-center gap-2 group"
+      >
+        <div className="bg-amber-50 p-3 rounded-2xl text-amber-800 border border-amber-100 group-hover:bg-amber-100 transition-colors">
+          <RotateCw size={24} className={`transition-transform duration-500 ${config.orientation === 'vertical' ? 'rotate-90' : 'rotate-0'}`} />
+        </div>
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rotate</span>
+      </button>
+    </div>
+  );
+};

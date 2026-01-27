@@ -1,0 +1,5 @@
+{
+  "name": "Vintage Virtual Ruler",
+  "description": "A classic wood-textured measurement tool for web designers. Supports pixels, inches, centimeters, and millimeters with adjustable DPI calibration and multi-directional placement.",
+  "requestFramePermissions": []
+}
