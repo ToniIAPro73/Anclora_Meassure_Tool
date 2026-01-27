@@ -61,9 +61,12 @@ console.log('Vintage Ruler Content Script Loaded');
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Message received in content script:', request);
+  if (request.action === 'ping') {
+    sendResponse({ status: 'pong' });
+    return;
+  }
   if (request.action === 'toggle-ruler') {
     toggleRuler();
     sendResponse({ status: 'success' });
   }
-  return true;
 });
