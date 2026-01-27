@@ -9,6 +9,8 @@ let root: ReactDOM.Root | null = null;
 let container: HTMLDivElement | null = null;
 let isVisible = false;
 
+import styles from './index.css?inline';
+
 const toggleRuler = () => {
   if (!container) {
     container = document.createElement('div');
@@ -18,26 +20,20 @@ const toggleRuler = () => {
     container.style.left = '0';
     container.style.width = '100%';
     container.style.height = '100%';
-    container.style.zIndex = '2147483647'; // Max z-index
-    container.style.pointerEvents = 'none'; // Background transparent to clicks
+    container.style.zIndex = '2147483647';
+    container.style.pointerEvents = 'none';
     
-    // Create a shadow root to isolate styles
     const shadow = container.attachShadow({ mode: 'open' });
     
-    // In v4, we need to inject the CSS into the shadow DOM manually
-    // or let crxjs handle it (if it supports shadow DOM out of the box).
-    // For now, let's create a container inside shadow
+    // Inject styles directly
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = styles;
+    shadow.appendChild(styleSheet);
+    
     const reactRoot = document.createElement('div');
     reactRoot.id = 'react-root';
-    reactRoot.style.pointerEvents = 'auto'; // Re-enable clicks for our app
+    reactRoot.style.pointerEvents = 'auto';
     shadow.appendChild(reactRoot);
-
-    // Inject styles (simplified for now)
-    const styleLink = document.createElement('link');
-    styleLink.rel = 'stylesheet';
-    // This is a bit of a hack, in production we'd use the bundled CSS
-    styleLink.href = chrome.runtime.getURL('index.css'); 
-    shadow.appendChild(styleLink);
 
     document.body.appendChild(container);
     root = ReactDOM.createRoot(reactRoot);

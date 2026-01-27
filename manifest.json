@@ -20,7 +20,7 @@
   "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {
-      "resources": ["*.css", "*.png", "*.jpg", "*.svg"],
+      "resources": ["assets/*", "*.css", "*.png", "*.jpg", "*.svg"],
       "matches": ["<all_urls>"]
     }
   ]
