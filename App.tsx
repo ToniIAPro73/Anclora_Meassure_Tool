@@ -35,9 +35,11 @@ const App: React.FC = () => {
     </div>
   );
 
+  const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
+
   return (
-    <div className="min-h-screen relative overflow-hidden bg-slate-50">
-      <MockLayout />
+    <div className={`relative overflow-hidden ${isExtension ? '' : 'min-h-screen bg-slate-50'}`}>
+      {!isExtension && <MockLayout />}
 
       <header className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center z-50 pointer-events-none">
         <div className="bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-slate-200 pointer-events-auto flex items-center gap-3">

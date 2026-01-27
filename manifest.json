@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Vintage Virtual Ruler",
+  "version": "1.0.0",
+  "description": "A vintage style virtual ruler to measure anything on your screen.",
+  "action": {
+    "default_title": "Toggle Ruler"
+  },
+  "background": {
+    "service_worker": "background.ts",
+    "type": "module"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.tsx"]
+    }
+  ],
+  "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": ["*.css", "*.png", "*.jpg", "*.svg"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
