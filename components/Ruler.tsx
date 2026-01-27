@@ -6,9 +6,10 @@ interface RulerProps {
   config: RulerConfig;
   position: Position;
   setPosition: (pos: Position) => void;
+  setConfig: React.Dispatch<React.SetStateAction<RulerConfig>>;
 }
 
-export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition }) => {
+export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, setConfig }) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef<Position>({ x: 0, y: 0 });
   const rulerRef = useRef<HTMLDivElement>(null);
@@ -33,6 +34,12 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition }) =
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
   }, []);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    const newZoom = Math.min(Math.max(config.zoom + delta, 0.5), 4.0);
+    setConfig(prev => ({ ...prev, zoom: Number(newZoom.toFixed(1)) }));
+  };
 
   useEffect(() => {
     if (isDragging) {
@@ -107,8 +114,9 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition }) =
     <div
       ref={rulerRef}
       onMouseDown={handleMouseDown}
-      className={`fixed transition-shadow cursor-grab active:cursor-grabbing z-40 wood-texture border-2 border-[#5d2e0c] rounded-sm select-none
-        ${isDragging ? 'shadow-2xl scale-[1.01]' : 'shadow-xl'}
+      onWheel={handleWheel}
+      className={`fixed cursor-grab active:cursor-grabbing z-40 wood-texture border-2 border-[#5d2e0c] rounded-sm select-none
+        ${isDragging ? 'shadow-2xl' : 'shadow-xl'}
         ${isHorizontal ? 'h-20 flex-row' : 'w-20 flex-col'}
       `}
       style={{
@@ -116,8 +124,29 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition }) =
         top: position.y,
         width: isHorizontal ? `${config.length}px` : '80px',
         height: isHorizontal ? '80px' : `${config.length}px`,
+        transform: `scale(${config.zoom})`,
+        transformOrigin: isHorizontal ? 'left center' : 'center top',
+        transition: isDragging ? 'none' : 'transform 0.2s ease-out, shadow 0.2s ease-out',
       }}
     >
+      {/* Reference Point Indicator (Zero Mark) */}
+      <div 
+        className={`absolute z-30 rounded-full border border-black/30 shadow-sm flex items-center justify-center pointer-events-none
+          ${isHorizontal ? 'left-0 top-0 -translate-x-1/2' : 'top-0 left-0 -translate-y-1/2'}
+        `}
+        style={{
+          width: '10px',
+          height: '10px',
+          backgroundColor: '#b8860b', // Dark goldenrod/Brass
+          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.5), 0 2px 4px rgba(0,0,0,0.5)',
+          top: isHorizontal ? '0' : '0',
+          left: isHorizontal ? '0' : '0'
+        }}
+        title="Reference Point (0)"
+      >
+        <div className="w-1.5 h-1.5 bg-red-600 rounded-full shadow-[0_0_2px_rgba(255,0,0,0.8)]" />
+      </div>
+
       {/* Decorative center wood grain highlight */}
       <div className={`absolute pointer-events-none opacity-20 bg-gradient-to-b from-white/10 to-transparent ${isHorizontal ? 'w-full h-1/2 top-0' : 'w-1/2 h-full left-0'}`} />
       
@@ -148,7 +177,7 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition }) =
       <div className={`absolute font-bold text-black/40 italic font-serif pointer-events-none
         ${isHorizontal ? 'bottom-2 right-4 text-sm' : 'bottom-4 left-1/2 -translate-x-1/2 text-xs text-center'}
       `}>
-        {config.unit.toUpperCase()}
+        {config.unit.toUpperCase()} {config.zoom !== 1 ? `(${Math.round(config.zoom * 100)}%)` : ''}
       </div>
 
       {/* Subtle branding burn-in */}

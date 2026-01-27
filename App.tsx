@@ -10,7 +10,8 @@ const App: React.FC = () => {
     unit: Unit.PIXELS,
     dpi: 96, // Standard screen DPI
     orientation: 'horizontal',
-    length: 800
+    length: 800,
+    zoom: 1.0
   });
 
   const [position, setPosition] = useState<Position>({ x: 100, y: 200 });
@@ -62,7 +63,8 @@ const App: React.FC = () => {
           <h2 className="font-bold text-slate-800 mb-2">How to use</h2>
           <ul className="text-sm text-slate-600 space-y-2">
             <li>• Drag the ruler body to move it.</li>
-            <li>• Use the panel to change units.</li>
+            <li>• <b>Scroll over the ruler</b> to zoom in/out.</li>
+            <li>• Use the panel to change units and zoom.</li>
             <li>• Adjust DPI for physical accuracy.</li>
             <li>• Toggle orientation (H/V).</li>
           </ul>
@@ -75,6 +77,7 @@ const App: React.FC = () => {
         config={config} 
         position={position} 
         setPosition={setPosition} 
+        setConfig={setConfig}
       />
 
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 text-slate-400 text-[10px] uppercase tracking-[0.2em] font-medium pointer-events-none">

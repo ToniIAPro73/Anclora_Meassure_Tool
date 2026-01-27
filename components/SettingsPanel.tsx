@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Unit, RulerConfig } from '../types';
-import { Settings2, RotateCw, Ruler as RulerIcon, Monitor, Maximize2 } from 'lucide-react';
+import { Settings2, RotateCw, Ruler as RulerIcon, Monitor, Maximize2, Search, RotateCcw } from 'lucide-react';
 
 interface SettingsPanelProps {
   config: RulerConfig;
@@ -17,6 +17,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
     updateConfig({ 
       orientation: config.orientation === 'horizontal' ? 'vertical' : 'horizontal' 
     });
+  };
+
+  const resetZoom = () => {
+    updateConfig({ zoom: 1.0 });
   };
 
   return (
@@ -50,10 +54,36 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
         </div>
       </div>
 
-      {/* DPI Calibration */}
+      {/* Zoom Control */}
       <div className="flex flex-col gap-2 w-full md:w-48">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
-          <div className="flex items-center gap-1"><Monitor size={12} /> Calibration (DPI)</div>
+          <div className="flex items-center gap-1"><Search size={12} /> Zoom</div>
+          <div className="flex items-center gap-2">
+            <span className="text-amber-700">{Math.round(config.zoom * 100)}%</span>
+            <button 
+              onClick={resetZoom}
+              className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-amber-800 transition-colors"
+              title="Reset Zoom (100%)"
+            >
+              <RotateCcw size={10} />
+            </button>
+          </div>
+        </label>
+        <input 
+          type="range"
+          min="0.5"
+          max="4"
+          step="0.1"
+          value={config.zoom}
+          onChange={(e) => updateConfig({ zoom: parseFloat(e.target.value) })}
+          className="w-full accent-amber-800 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
+
+      {/* DPI Calibration */}
+      <div className="flex flex-col gap-2 w-full md:w-40">
+        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
+          <div className="flex items-center gap-1"><Monitor size={12} /> Calibrate (DPI)</div>
           <span className="text-amber-700">{config.dpi}</span>
         </label>
         <input 
@@ -67,9 +97,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
       </div>
 
       {/* Ruler Length */}
-      <div className="flex flex-col gap-2 w-full md:w-48">
+      <div className="flex flex-col gap-2 w-full md:w-40">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
-          <div className="flex items-center gap-1"><Maximize2 size={12} /> Ruler Length (px)</div>
+          <div className="flex items-center gap-1"><Maximize2 size={12} /> Length (px)</div>
           <span className="text-amber-700">{config.length}</span>
         </label>
         <input 

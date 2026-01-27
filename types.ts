@@ -11,6 +11,7 @@ export interface RulerConfig {
   dpi: number;
   orientation: 'horizontal' | 'vertical';
   length: number; // in pixels
+  zoom: number;   // multiplier
 }
 
 export interface Position {
