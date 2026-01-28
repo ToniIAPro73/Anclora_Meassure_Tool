@@ -42,6 +42,8 @@ const toggleRuler = () => {
   isVisible = !isVisible;
   if (isVisible) {
     container.style.display = 'block';
+    container.style.width = '100vw';
+    container.style.height = '100vh';
     root?.render(
       <React.StrictMode>
         <App />
@@ -49,7 +51,8 @@ const toggleRuler = () => {
     );
   } else {
     container.style.display = 'none';
-    // We keep it in DOM but hidden
+    container.style.width = '0';
+    container.style.height = '0';
   }
 };
 
