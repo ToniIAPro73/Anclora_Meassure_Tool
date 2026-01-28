@@ -1,8 +1,7 @@
-/* Vintage Fonts */
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Instrument+Serif:ital@0;1&display=swap');
-
 @import "tailwindcss";
 @config "./tailwind.config.js";
+
 
 /* Base styles for the app itself - scoped inside Shadow DOM */
 :host {
