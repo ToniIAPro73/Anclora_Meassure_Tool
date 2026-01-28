@@ -94,24 +94,26 @@ const App: React.FC = () => {
     <div id="root-container" className={`relative overflow-hidden ${isGlobalApp ? 'bg-transparent' : 'min-h-screen bg-slate-50'}`}>
       {!isGlobalApp && <MockLayout />}
 
-      <header className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center z-50 pointer-events-none">
-        <div className="bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-slate-200 pointer-events-auto flex items-center gap-3">
-          <div className="bg-amber-800 p-1.5 rounded-lg text-white">
-            <Layers size={18} />
+      {!isGlobalApp && (
+        <header className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center z-50 pointer-events-none">
+          <div className="bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-slate-200 pointer-events-auto flex items-center gap-3">
+            <div className="bg-amber-800 p-1.5 rounded-lg text-white">
+              <Layers size={18} />
+            </div>
+            <div>
+              <h1 className="text-sm font-bold text-slate-800">Vintage Ruler</h1>
+              <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Pro Measuring Tool</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-sm font-bold text-slate-800">Vintage Ruler</h1>
-            <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Pro Measuring Tool</p>
-          </div>
-        </div>
 
-        <button 
-          onClick={() => setShowInfo(!showInfo)}
-          className="bg-white/80 backdrop-blur-md p-2 rounded-full shadow-lg border border-slate-200 pointer-events-auto hover:bg-white transition-colors text-slate-600"
-        >
-          <Info size={20} />
-        </button>
-      </header>
+          <button 
+            onClick={() => setShowInfo(!showInfo)}
+            className="bg-white/80 backdrop-blur-md p-2 rounded-full shadow-lg border border-slate-200 pointer-events-auto hover:bg-white transition-colors text-slate-600"
+          >
+            <Info size={20} />
+          </button>
+        </header>
+      )}
 
       {showInfo && (
         <div className="fixed top-16 right-4 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-5 z-50 animate-in fade-in slide-in-from-top-4 duration-300">
