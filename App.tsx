@@ -11,7 +11,8 @@ const App: React.FC = () => {
     dpi: 96, // Standard screen DPI
     orientation: 'horizontal',
     length: 800,
-    zoom: 1.0
+    zoom: 1.0,
+    rotation: 0
   });
 
   const [position, setPosition] = useState<Position>({ x: 100, y: 200 });
@@ -36,10 +37,28 @@ const App: React.FC = () => {
   );
 
   const isExtension = typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id;
+  const isElectron = typeof window !== 'undefined' && (window as any).process && (window as any).process.type === 'renderer';
+  const isGlobalApp = isExtension || isElectron;
+
+  useEffect(() => {
+    if (isElectron) {
+      const { ipcRenderer } = (window as any).require('electron');
+      
+      const handleMouseMove = (e: MouseEvent) => {
+        // If we are touching a UI element (ruler, panel, etc.), don't ignore mouse
+        // If we are touching the transparent background, ignore mouse to allow clicks through
+        const isOverUI = e.target !== document.documentElement && e.target !== document.body && (e.target as HTMLElement).id !== 'root-container';
+        ipcRenderer.send('set-ignore-mouse-events', !isOverUI, { forward: true });
+      };
+
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => window.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, [isElectron]);
 
   return (
-    <div className={`relative overflow-hidden ${isExtension ? '' : 'min-h-screen bg-slate-50'}`}>
-      {!isExtension && <MockLayout />}
+    <div id="root-container" className={`relative overflow-hidden ${isGlobalApp ? 'bg-transparent' : 'min-h-screen bg-slate-50'}`}>
+      {!isGlobalApp && <MockLayout />}
 
       <header className="fixed top-0 left-0 right-0 p-4 flex justify-between items-center z-50 pointer-events-none">
         <div className="bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-slate-200 pointer-events-auto flex items-center gap-3">

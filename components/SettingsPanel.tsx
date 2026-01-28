@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Unit, RulerConfig } from '../types';
-import { Settings2, RotateCw, Ruler as RulerIcon, Monitor, Maximize2, Search, RotateCcw } from 'lucide-react';
+import { Settings2, RotateCw, Ruler as RulerIcon, Monitor, Maximize2, Search, RotateCcw, Power } from 'lucide-react';
 
 interface SettingsPanelProps {
   config: RulerConfig;
@@ -9,18 +9,27 @@ interface SettingsPanelProps {
 }
 
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig }) => {
+  const isElectron = typeof window !== 'undefined' && (window as any).process && (window as any).process.type === 'renderer';
+
+  const quitApp = () => {
+    if (isElectron) {
+      const { ipcRenderer } = (window as any).require('electron');
+      ipcRenderer.send('quit-app');
+    }
+  };
+
   const updateConfig = (updates: Partial<RulerConfig>) => {
     setConfig(prev => ({ ...prev, ...updates }));
   };
 
   const toggleOrientation = () => {
     updateConfig({ 
-      orientation: config.orientation === 'horizontal' ? 'vertical' : 'horizontal' 
+      rotation: (config.rotation + 90) % 360
     });
   };
 
   const resetZoom = () => {
-    updateConfig({ zoom: 1.0 });
+    updateConfig({ zoom: 1.0, rotation: 0 });
   };
 
   return (
@@ -114,15 +123,29 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
       </div>
 
       {/* Orientation Toggle */}
-      <button 
-        onClick={toggleOrientation}
-        className="flex flex-col items-center justify-center gap-2 group"
-      >
-        <div className="bg-amber-50 p-3 rounded-2xl text-amber-800 border border-amber-100 group-hover:bg-amber-100 transition-colors">
-          <RotateCw size={24} className={`transition-transform duration-500 ${config.orientation === 'vertical' ? 'rotate-90' : 'rotate-0'}`} />
-        </div>
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rotate</span>
-      </button>
+      <div className="flex items-center gap-4">
+        <button 
+          onClick={toggleOrientation}
+          className="flex flex-col items-center justify-center gap-2 group"
+        >
+          <div className="bg-amber-50 p-3 rounded-2xl text-amber-800 border border-amber-100 group-hover:bg-amber-100 transition-colors">
+            <RotateCw size={24} className="transition-transform duration-500" style={{ transform: `rotate(${config.rotation}deg)` }} />
+          </div>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rotate</span>
+        </button>
+
+        {isElectron && (
+          <button 
+            onClick={quitApp}
+            className="flex flex-col items-center justify-center gap-2 group"
+          >
+            <div className="bg-red-50 p-3 rounded-2xl text-red-600 border border-red-100 group-hover:bg-red-100 transition-colors">
+              <Power size={24} />
+            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Quit</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 };

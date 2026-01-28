@@ -4,18 +4,73 @@
 @import "tailwindcss";
 @config "./tailwind.config.js";
 
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'EB Garamond', serif;
+  background: transparent !important;
+}
+
 :host {
   font-family: 'EB Garamond', serif;
 }
 
 .wood-texture {
-  background-color: #8b4513 !important;
+  background-color: #a0522d !important; /* Slightly more vibrant Sienna */
   background-image: 
-    linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px),
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 10px),
-    repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 8px) !important;
-  box-shadow: inset 0 0 50px rgba(0,0,0,0.3) !important;
+    linear-gradient(rgba(0,0,0,0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.2) 1px, transparent 1px),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0, rgba(255,255,255,0.1) 1px, transparent 1px, transparent 12px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 10px) !important;
+  box-shadow: 
+    inset 0 0 30px rgba(0,0,0,0.4),
+    0 4px 15px rgba(0,0,0,0.3) !important;
+  border: 1px solid #5d2e0c !important;
 }
+
+/* Ensure ticks are very visible - using a high contrast cream/ivory color like traditional ink */
+.tick-mark {
+  background-color: #fffdd0 !important; /* Cream/Ivory */
+  box-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.5);
+}
+
+.tick-label {
+  color: #fffdd0 !important; /* Cream/Ivory */
+  font-weight: 900 !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  font-size: 12px !important;
+}
+
+/* Make the brand burn-in slightly more visible too */
+.brand-text {
+  color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.rotate-handle {
+  cursor: crosshair;
+  background-color: #b8860b;
+  border: 1px solid #5d2e0c;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.5), 0 2px 4px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.rotate-handle:hover {
+  background-color: #daa520;
+  transform: scale(1.1);
+}
+
+.rotate-handle::after {
+  content: '↻';
+  color: rgba(0,0,0,0.5);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+
+
 
 

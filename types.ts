@@ -12,6 +12,7 @@ export interface RulerConfig {
   orientation: 'horizontal' | 'vertical';
   length: number; // in pixels
   zoom: number;   // multiplier
+  rotation: number; // in degrees
 }
 
 export interface Position {
