@@ -33,26 +33,24 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
   };
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-3xl p-3 z-50 flex flex-wrap justify-center items-center gap-4 max-w-[95vw] w-fit mx-auto animate-in fade-in slide-in-from-bottom-4 duration-300">
-
-      <div className="flex items-center gap-3">
-        <div className="bg-slate-100 p-2 rounded-xl text-slate-500">
-          <Settings2 size={18} />
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-3xl border border-slate-200 shadow-[0_15px_40px_rgba(0,0,0,0.2)] rounded-2xl px-4 py-2 z-50 flex items-center gap-4 w-max animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="flex items-center gap-2">
+        <div className="bg-slate-100 p-1.5 rounded-lg text-slate-500">
+          <Settings2 size={16} />
         </div>
-        <div className="h-8 w-[1px] bg-slate-200 hidden md:block" />
       </div>
 
       {/* Unit Selection */}
-      <div className="flex flex-col gap-1.5">
-        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
-          <RulerIcon size={12} /> Unit System
+      <div className="flex flex-col gap-1">
+        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-tight flex items-center gap-1">
+          <RulerIcon size={10} /> Units
         </label>
-        <div className="flex bg-slate-100 p-1 rounded-xl shadow-inner-sm">
+        <div className="flex bg-slate-100 p-0.5 rounded-lg shadow-sm">
           {Object.values(Unit).map(u => (
             <button
               key={u}
               onClick={() => updateConfig({ unit: u })}
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+              className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-all ${
                 config.unit === u 
                   ? 'bg-white text-amber-800 shadow-sm' 
                   : 'text-slate-500 hover:text-slate-700'
@@ -64,20 +62,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
         </div>
       </div>
 
+      <div className="h-8 w-[1px] bg-slate-100" />
+
       {/* Zoom Control */}
-      <div className="flex flex-col gap-1.5 w-full md:w-36">
-        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
-          <div className="flex items-center gap-1"><Search size={12} /> Zoom</div>
-          <div className="flex items-center gap-2">
-            <span className="text-amber-700">{Math.round(config.zoom * 100)}%</span>
-            <button 
-              onClick={resetZoom}
-              className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-amber-800 transition-colors"
-              title="Reset Zoom (100%)"
-            >
-              <RotateCcw size={10} />
-            </button>
-          </div>
+      <div className="flex flex-col gap-1 w-24">
+        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-tight flex items-center justify-between">
+          <div className="flex items-center gap-1"><Search size={10} /> Zoom</div>
+          <span className="text-amber-700 font-mono">{Math.round(config.zoom * 100)}%</span>
         </label>
         <input 
           type="range"
@@ -86,15 +77,15 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
           step="0.1"
           value={config.zoom}
           onChange={(e) => updateConfig({ zoom: parseFloat(e.target.value) })}
-          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-full appearance-none cursor-pointer"
         />
       </div>
 
       {/* DPI Calibration */}
-      <div className="flex flex-col gap-1.5 w-full md:w-32">
-        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
-          <div className="flex items-center gap-1"><Monitor size={12} /> DPI</div>
-          <span className="text-amber-700">{config.dpi}</span>
+      <div className="flex flex-col gap-1 w-20">
+        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-tight flex items-center justify-between">
+          <span>DPI</span>
+          <span className="text-amber-700 font-mono">{config.dpi}</span>
         </label>
         <input 
           type="range"
@@ -102,15 +93,15 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
           max="200"
           value={config.dpi}
           onChange={(e) => updateConfig({ dpi: parseInt(e.target.value) })}
-          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-full appearance-none cursor-pointer"
         />
       </div>
 
       {/* Ruler Length */}
-      <div className="flex flex-col gap-1.5 w-full md:w-32">
-        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
-          <div className="flex items-center gap-1"><Maximize2 size={12} /> Length</div>
-          <span className="text-amber-700">{config.length}</span>
+      <div className="flex flex-col gap-1 w-24">
+        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-tight flex items-center justify-between">
+          <span>Length</span>
+          <span className="text-amber-700 font-mono">{config.length}</span>
         </label>
         <input 
           type="range"
@@ -119,31 +110,29 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
           step="50"
           value={config.length}
           onChange={(e) => updateConfig({ length: parseInt(e.target.value) })}
-          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-full appearance-none cursor-pointer"
         />
       </div>
 
-      {/* Orientation Toggle */}
-      <div className="flex items-center gap-4">
+      <div className="h-8 w-[1px] bg-slate-100" />
+
+      {/* Actions */}
+      <div className="flex items-center gap-2">
         <button 
           onClick={toggleOrientation}
-          className="flex flex-col items-center justify-center gap-1.5 group"
+          className="p-2 bg-amber-50 rounded-xl text-amber-800 hover:bg-amber-100 transition-colors shadow-sm"
+          title="Rotate 90°"
         >
-          <div className="bg-amber-50 p-2.5 rounded-2xl text-amber-800 border border-amber-100 group-hover:bg-amber-100 transition-colors shadow-sm">
-            <RotateCw size={20} className="transition-transform duration-500" style={{ transform: `rotate(${config.rotation}deg)` }} />
-          </div>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rotate</span>
+          <RotateCw size={18} className="transition-transform duration-500" style={{ transform: `rotate(${config.rotation}deg)` }} />
         </button>
 
         {isElectron && (
           <button 
             onClick={quitApp}
-            className="flex flex-col items-center justify-center gap-1.5 group"
+            className="p-2 bg-red-50 rounded-xl text-red-600 hover:bg-red-100 transition-colors shadow-sm"
+            title="Quit Application"
           >
-            <div className="bg-red-50 p-2.5 rounded-2xl text-red-600 border border-red-100 group-hover:bg-red-100 transition-colors shadow-sm">
-              <Power size={20} />
-            </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Quit</span>
+            <Power size={18} />
           </button>
         )}
       </div>
