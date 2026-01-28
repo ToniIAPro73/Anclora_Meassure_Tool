@@ -43,16 +43,37 @@ const App: React.FC = () => {
   useEffect(() => {
     if (isElectron) {
       const { ipcRenderer } = (window as any).require('electron');
+      let isInteracting = false;
+
+      const handleMouseDown = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        const isOverUI = target !== document.documentElement && target !== document.body && target.id !== 'root-container';
+        if (isOverUI) {
+          isInteracting = true;
+          ipcRenderer.send('set-ignore-mouse-events', false);
+        }
+      };
+
+      const handleMouseUp = () => {
+        isInteracting = false;
+      };
       
       const handleMouseMove = (e: MouseEvent) => {
-        // If we are touching a UI element (ruler, panel, etc.), don't ignore mouse
-        // If we are touching the transparent background, ignore mouse to allow clicks through
-        const isOverUI = e.target !== document.documentElement && e.target !== document.body && (e.target as HTMLElement).id !== 'root-container';
+        if (isInteracting) return;
+        
+        const target = e.target as HTMLElement;
+        const isOverUI = target !== document.documentElement && target !== document.body && target.id !== 'root-container';
         ipcRenderer.send('set-ignore-mouse-events', !isOverUI, { forward: true });
       };
 
       window.addEventListener('mousemove', handleMouseMove);
-      return () => window.removeEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mousedown', handleMouseDown);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mousedown', handleMouseDown);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
     }
   }, [isElectron]);
 

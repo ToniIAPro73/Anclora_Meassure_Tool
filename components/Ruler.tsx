@@ -48,11 +48,26 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, set
       const dx = e.clientX - position.x;
       const dy = e.clientY - position.y;
       const currentAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-      const angleDiff = currentAngle - rotateStartAngle.current;
+      let angleDiff = currentAngle - rotateStartAngle.current;
       
+      let finalRotation = (rotateStart.current + angleDiff) % 360;
+      
+      // Snapping logic
+      if (e.shiftKey) {
+        // Snap to 45 degrees
+        finalRotation = Math.round(finalRotation / 45) * 45;
+      } else {
+        // Subtle snap to 2 degrees to help hitting exactly 0, 90, etc.
+        if (Math.abs(finalRotation % 90) < 3 || Math.abs(finalRotation % 90) > 87) {
+          finalRotation = Math.round(finalRotation / 90) * 90;
+        } else {
+          finalRotation = Math.round(finalRotation / 2) * 2;
+        }
+      }
+
       setConfig(prev => ({
         ...prev,
-        rotation: (rotateStart.current + angleDiff) % 360
+        rotation: finalRotation
       }));
     }
   }, [isDragging, isRotating, position, setConfig, setPosition]);
@@ -136,10 +151,11 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, set
       ref={rulerRef}
       onMouseDown={handleMouseDown}
       onWheel={handleWheel}
-      className={`fixed cursor-grab active:cursor-grabbing z-40 wood-texture border-2 border-[#5d2e0c] rounded-sm select-none
+      className={`fixed cursor-move active:cursor-grabbing z-40 wood-texture border-2 border-[#5d2e0c] rounded-sm select-none
         ${isDragging || isRotating ? 'shadow-2xl' : 'shadow-xl'}
         flex flex-row
       `}
+      title="Drag to move, Scroll to zoom, Use bottom knob to rotate"
       style={{
         left: position.x,
         top: position.y,
@@ -150,7 +166,7 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, set
         transition: isDragging || isRotating ? 'none' : 'transform 0.2s ease-out, shadow 0.2s ease-out',
       }}
     >
-      {/* Zero Mark Knob (Position Reference) */}
+      {/* Zero Mark Knob (Position Reference / Drag Point) */}
       <div 
         className="absolute z-50 rounded-full border border-black/30 shadow-sm flex items-center justify-center pointer-events-none"
         style={{
@@ -161,15 +177,27 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, set
           top: '-6px',
           left: '-6px'
         }}
+        title="Pivot Point (0)"
       >
         <div className="w-1.5 h-1.5 bg-red-600 rounded-full shadow-[0_0_2px_rgba(255,0,0,0.8)]" />
+        
+        {/* Rotation Guides (Axes) and Angle Badge */}
+        {isRotating && (
+          <>
+            <div className="absolute rotation-guide border-t-2 border-dashed w-[200vw] left-[-100vw] top-1/2 -translate-y-1/2" />
+            <div className="absolute rotation-guide border-l-2 border-dashed h-[200vh] top-[-100vh] left-1/2 -translate-x-1/2" />
+            <div className="angle-badge top-8 left-8">
+              {Math.round(config.rotation)}°
+            </div>
+          </>
+        )}
       </div>
 
       {/* Rotation Handle (Knob in the corner) */}
       <div 
         onMouseDown={handleRotateStart}
         className="rotate-handle absolute bottom-1 right-1 w-6 h-6 rounded-md z-50 flex items-center justify-center"
-        title="Drag to rotate ruler"
+        title="Drag to rotate ruler (holds shift to snap)"
       />
 
       {/* Decorative center wood grain highlight */}
@@ -198,8 +226,8 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, set
       </div>
 
       {/* Branding */}
-      <div className="absolute opacity-10 pointer-events-none font-serif brand-text top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl uppercase tracking-widest">
-        Craftsman
+      <div className="absolute opacity-10 pointer-events-none font-serif brand-text top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl uppercase tracking-[0.3em]">
+        CRAFTSMAN
       </div>
     </div>
   );
