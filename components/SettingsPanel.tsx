@@ -33,7 +33,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl p-4 z-50 flex flex-col md:flex-row items-center gap-6 min-w-[300px] md:min-w-0 animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-3xl p-3 z-50 flex flex-col md:flex-row items-center gap-4 max-w-[95vw] w-max animate-in fade-in slide-in-from-bottom-4 duration-300">
+
       <div className="flex items-center gap-3">
         <div className="bg-slate-100 p-2 rounded-xl text-slate-500">
           <Settings2 size={18} />
