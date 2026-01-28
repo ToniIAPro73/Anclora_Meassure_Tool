@@ -17,6 +17,8 @@ const App: React.FC = () => {
 
   const [position, setPosition] = useState<Position>({ x: 100, y: 200 });
   const [showInfo, setShowInfo] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
 
   // Background visual to demonstrate measurement
   const MockLayout = () => (
@@ -128,13 +130,17 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <SettingsPanel config={config} setConfig={setConfig} />
+      {showSettings && (
+        <SettingsPanel config={config} setConfig={setConfig} />
+      )}
 
       <Ruler 
         config={config} 
         position={position} 
         setPosition={setPosition} 
         setConfig={setConfig}
+        onToggleSettings={() => setShowSettings(!showSettings)}
+        showSettings={showSettings}
       />
 
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 text-slate-400 text-[10px] uppercase tracking-[0.2em] font-medium pointer-events-none">

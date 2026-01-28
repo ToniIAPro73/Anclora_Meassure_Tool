@@ -1,5 +1,5 @@
-
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { Settings2 } from 'lucide-react';
 import { RulerConfig, Position, Unit } from '../types';
 
 interface RulerProps {
@@ -7,9 +7,11 @@ interface RulerProps {
   position: Position;
   setPosition: (pos: Position) => void;
   setConfig: React.Dispatch<React.SetStateAction<RulerConfig>>;
+  onToggleSettings: () => void;
+  showSettings: boolean;
 }
 
-export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, setConfig }) => {
+export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, setConfig, onToggleSettings, showSettings }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
   const dragStart = useRef<Position>({ x: 0, y: 0 });
@@ -199,6 +201,19 @@ export const Ruler: React.FC<RulerProps> = ({ config, position, setPosition, set
         className="rotate-handle absolute bottom-1 right-1 w-6 h-6 rounded-md z-50 flex items-center justify-center"
         title="Drag to rotate ruler (holds shift to snap)"
       />
+
+      {/* Settings Toggle Button (Bottom Left) */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onToggleSettings(); }}
+        onMouseDown={(e) => e.stopPropagation()}
+        className={`absolute bottom-1 left-1 w-6 h-6 rounded-md z-50 flex items-center justify-center transition-colors
+          ${showSettings ? 'bg-amber-800 text-white' : 'bg-[#b8860b] text-black/60 hover:bg-[#daa520]'}
+          border border-[#5d2e0c] shadow-sm
+        `}
+        title="Toggle Settings Panel"
+      >
+        <Settings2 size={14} />
+      </button>
 
       {/* Decorative center wood grain highlight */}
       <div className="absolute pointer-events-none opacity-20 bg-gradient-to-b from-white/10 to-transparent w-full h-1/2 top-0" />

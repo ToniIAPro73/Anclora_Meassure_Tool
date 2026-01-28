@@ -33,25 +33,25 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl p-6 z-50 flex flex-col md:flex-row items-center gap-8 min-w-[300px] md:min-w-0">
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-3xl p-4 z-50 flex flex-col md:flex-row items-center gap-6 min-w-[300px] md:min-w-0 animate-in fade-in slide-in-from-bottom-4 duration-300">
       <div className="flex items-center gap-3">
         <div className="bg-slate-100 p-2 rounded-xl text-slate-500">
-          <Settings2 size={20} />
+          <Settings2 size={18} />
         </div>
         <div className="h-8 w-[1px] bg-slate-200 hidden md:block" />
       </div>
 
       {/* Unit Selection */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1.5">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1">
           <RulerIcon size={12} /> Unit System
         </label>
-        <div className="flex bg-slate-100 p-1 rounded-xl">
+        <div className="flex bg-slate-100 p-1 rounded-xl shadow-inner-sm">
           {Object.values(Unit).map(u => (
             <button
               key={u}
               onClick={() => updateConfig({ unit: u })}
-              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
                 config.unit === u 
                   ? 'bg-white text-amber-800 shadow-sm' 
                   : 'text-slate-500 hover:text-slate-700'
@@ -64,7 +64,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
       </div>
 
       {/* Zoom Control */}
-      <div className="flex flex-col gap-2 w-full md:w-48">
+      <div className="flex flex-col gap-1.5 w-full md:w-36">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
           <div className="flex items-center gap-1"><Search size={12} /> Zoom</div>
           <div className="flex items-center gap-2">
@@ -85,14 +85,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
           step="0.1"
           value={config.zoom}
           onChange={(e) => updateConfig({ zoom: parseFloat(e.target.value) })}
-          className="w-full accent-amber-800 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
         />
       </div>
 
       {/* DPI Calibration */}
-      <div className="flex flex-col gap-2 w-full md:w-40">
+      <div className="flex flex-col gap-1.5 w-full md:w-32">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
-          <div className="flex items-center gap-1"><Monitor size={12} /> Calibrate (DPI)</div>
+          <div className="flex items-center gap-1"><Monitor size={12} /> DPI</div>
           <span className="text-amber-700">{config.dpi}</span>
         </label>
         <input 
@@ -101,14 +101,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
           max="200"
           value={config.dpi}
           onChange={(e) => updateConfig({ dpi: parseInt(e.target.value) })}
-          className="w-full accent-amber-800 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
         />
       </div>
 
       {/* Ruler Length */}
-      <div className="flex flex-col gap-2 w-full md:w-40">
+      <div className="flex flex-col gap-1.5 w-full md:w-32">
         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1 justify-between">
-          <div className="flex items-center gap-1"><Maximize2 size={12} /> Length (px)</div>
+          <div className="flex items-center gap-1"><Maximize2 size={12} /> Length</div>
           <span className="text-amber-700">{config.length}</span>
         </label>
         <input 
@@ -118,7 +118,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
           step="50"
           value={config.length}
           onChange={(e) => updateConfig({ length: parseInt(e.target.value) })}
-          className="w-full accent-amber-800 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+          className="w-full accent-amber-800 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
         />
       </div>
 
@@ -126,10 +126,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
       <div className="flex items-center gap-4">
         <button 
           onClick={toggleOrientation}
-          className="flex flex-col items-center justify-center gap-2 group"
+          className="flex flex-col items-center justify-center gap-1.5 group"
         >
-          <div className="bg-amber-50 p-3 rounded-2xl text-amber-800 border border-amber-100 group-hover:bg-amber-100 transition-colors">
-            <RotateCw size={24} className="transition-transform duration-500" style={{ transform: `rotate(${config.rotation}deg)` }} />
+          <div className="bg-amber-50 p-2.5 rounded-2xl text-amber-800 border border-amber-100 group-hover:bg-amber-100 transition-colors shadow-sm">
+            <RotateCw size={20} className="transition-transform duration-500" style={{ transform: `rotate(${config.rotation}deg)` }} />
           </div>
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Rotate</span>
         </button>
@@ -137,10 +137,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ config, setConfig 
         {isElectron && (
           <button 
             onClick={quitApp}
-            className="flex flex-col items-center justify-center gap-2 group"
+            className="flex flex-col items-center justify-center gap-1.5 group"
           >
-            <div className="bg-red-50 p-3 rounded-2xl text-red-600 border border-red-100 group-hover:bg-red-100 transition-colors">
-              <Power size={24} />
+            <div className="bg-red-50 p-2.5 rounded-2xl text-red-600 border border-red-100 group-hover:bg-red-100 transition-colors shadow-sm">
+              <Power size={20} />
             </div>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Quit</span>
           </button>
