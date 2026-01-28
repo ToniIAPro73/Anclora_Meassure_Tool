@@ -4,17 +4,16 @@
 @import "tailwindcss";
 @config "./tailwind.config.js";
 
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  font-family: 'EB Garamond', serif;
-  background: transparent !important;
-}
-
+/* Base styles for the app itself - scoped inside Shadow DOM */
 :host {
   font-family: 'EB Garamond', serif;
+  display: block;
+  /* Reset any bleeding styles */
+  all: initial;
+  font-family: 'EB Garamond', serif;
 }
+
+
 
 .wood-texture {
   background-color: #a0522d !important; /* Slightly more vibrant Sienna */

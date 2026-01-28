@@ -42,6 +42,19 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (isElectron) {
+      // Inject Electron-only global styles safely
+      const style = document.createElement('style');
+      style.textContent = `
+        body { 
+          margin: 0 !important; 
+          padding: 0 !important; 
+          overflow: hidden !important; 
+          background: transparent !important; 
+        }
+        #root { background: transparent !important; }
+      `;
+      document.head.appendChild(style);
+
       const { ipcRenderer } = (window as any).require('electron');
       let isInteracting = false;
 
